@@ -106,6 +106,14 @@ func (i *cveItem) ProblemTypes() []string {
 	return cwes
 }
 
+// Description returns English written description of vulnerability
+func (i *cveItem) Description() string {
+	for _, dsc := range i.cveItem.CVE.Description.DescriptionData {
+		return dsc.Value
+	}
+	return ""
+}
+
 // CVSS20base returns CVSS 2.0 base score of vulnerability
 func (i *cveItem) CVSS20base() float64 {
 	if i.cveItem.Impact != nil && i.cveItem.Impact.BaseMetricV2 != nil && i.cveItem.Impact.BaseMetricV2.CVSSV2 != nil {
