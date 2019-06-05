@@ -106,7 +106,7 @@ func (i *cveItem) ProblemTypes() []string {
 	return cwes
 }
 
-// Description returns English written description of vulnerability
+// Description returns plain-text description of vulnerability
 func (i *cveItem) Description() string {
 	for _, dsc := range i.cveItem.CVE.Description.DescriptionData {
 		return dsc.Value

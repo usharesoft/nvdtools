@@ -34,17 +34,18 @@ import (
 )
 
 type config struct {
-	nProcessors                                     int
-	cpesAt, cvesAt, matchesAt                       int
-	cwesAt, cvss2at, cvss3at, cvssAt, descriptionAt int
-	inFieldSep, inRecSep                            string
-	outFieldSep, outRecSep                          string
-	cpuProfile, memProfile                          string
-	skip                                            fieldsToSkip
-	indexedDict                                     bool
-	requireVersion                                  bool
-	cacheSize                                       int64
-	overrides                                       multiString
+	nProcessors               int
+	cpesAt, cvesAt, matchesAt int
+	cwesAt, cvss2at, cvss3at  int
+	cvssAt, descAt            int
+	inFieldSep, inRecSep      string
+	outFieldSep, outRecSep    string
+	cpuProfile, memProfile    string
+	skip                      fieldsToSkip
+	indexedDict               bool
+	requireVersion            bool
+	cacheSize                 int64
+	overrides                 multiString
 }
 
 func (c *config) addFlags() {
@@ -52,11 +53,11 @@ func (c *config) addFlags() {
 	flag.IntVar(&c.cpesAt, "cpe", 0, "look for CPE names in input at this position (starts with 1)")
 	flag.IntVar(&c.cvesAt, "cve", 0, "output CVEs at this position (starts with 1)")
 	flag.IntVar(&c.cwesAt, "cwe", 0, "output problem types (CWEs) at this position (starts with 1)")
-	flag.IntVar(&c.descriptionAt, "description", 0, "output CVE description at this position (starts with 1)")
 	flag.IntVar(&c.cvssAt, "cvss", 0, "output CVSS base score (v3 if available, v2 otherwise) at this position (starts with 1)")
 	flag.IntVar(&c.cvss2at, "cvss2", 0, "output CVSS 2.0 base score at this position (starts with 1)")
 	flag.IntVar(&c.cvss3at, "cvss3", 0, "output CVSS 3.0 base score at this position (starts with 1)")
 	flag.IntVar(&c.matchesAt, "matches", 0, "output CPEs that matches CVE at this position; 0 disables the output")
+	flag.IntVar(&c.descAt, "desc", 0, "output CVE plain-text description at this position (starts with 1)")
 	flag.Int64Var(&c.cacheSize, "cache_size", 0, "limit the cache size to this amount in bytes; 0 removes the limit, -1 disables caching")
 	flag.StringVar(&c.inFieldSep, "d", "\t", "input columns delimiter")
 	flag.StringVar(&c.inRecSep, "d2", ",", "inner input columns delimiter: separates elements of list passed into a CSV columns")
@@ -91,8 +92,8 @@ func (c *config) mustBeValid() {
 		glog.Errorf("-cwe value is invalid %d", c.cwesAt)
 		flag.Usage()
 	}
-	if c.descriptionAt < 0 {
-		glog.Errorf("-description value is invalid %d", c.descriptionAt)
+	if c.descAt < 0 {
+		glog.Errorf("-desc value is invalid %d", c.descAt)
 		flag.Usage()
 	}
 	if c.cvss2at < 0 {
@@ -147,7 +148,7 @@ func process(in <-chan []string, out chan<- []string, cache *cvefeed.Cache, cfg 
 				cfg.cvesAt-1, matches.CVE.CVEID(),
 				cfg.matchesAt-1, strings.Join(matchingCPEs, cfg.outRecSep),
 				cfg.cwesAt-1, strings.Join(matches.CVE.ProblemTypes(), cfg.outRecSep),
-				cfg.descriptionAt-1, matches.CVE.Description(),
+				cfg.descAt-1, matches.CVE.Description(),
 				cfg.cvss2at-1, fmt.Sprintf("%.1f", matches.CVE.CVSS20base()),
 				cfg.cvss3at-1, fmt.Sprintf("%.1f", matches.CVE.CVSS30base()),
 				cfg.cvssAt-1, fmt.Sprintf("%.1f", cvss),
