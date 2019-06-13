@@ -23,7 +23,7 @@ Finally, use the [cpe2cve](https://github.com/facebookincubator/nvdtools/tree/ma
 ```bash
 rpm -qa | \
 rpm2cpe -rpm=1 -cpe=2 | \
-cpe2cve -cpe=2 -cve=3 -cwe=4 -feed=json /tmp/nvd/*.json.gz
+cpe2cve -cpe=2 -cve=3 -cwe=4 -idxd -feed=json /tmp/nvd/*.json.gz
 ```
 
 The command above process each CPE individually and prints their respective CVEs. However, it's not uncommon in the NVD database to have more elaborate CVEs which affect a combination of CPEs, e.g. if A and B and not C. For this case, you could group your CPEs per host, for example, and process them in a single batch:
