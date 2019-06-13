@@ -38,6 +38,7 @@ type CVEItem interface {
 	CVEID() string
 	Config() []LogicalTest
 	ProblemTypes() []string
+	Description() string
 	CVSS20base() float64
 	CVSS30base() float64
 }
@@ -85,6 +86,7 @@ func MergeCVEItems(x, y CVEItem) CVEItem {
 	z := mergeCVEItem{
 		id:           x.CVEID(),
 		problemTypes: cwes,
+		description:  x.Description(),
 		cvss20base:   cvss20,
 		cvss30base:   cvss30,
 		config:       []LogicalTest{mergeOp},
@@ -97,6 +99,7 @@ type mergeCVEItem struct {
 	id                     string
 	config                 []LogicalTest
 	problemTypes           []string
+	description            string
 	cvss20base, cvss30base float64
 }
 
@@ -110,6 +113,10 @@ func (i mergeCVEItem) Config() []LogicalTest {
 
 func (i mergeCVEItem) ProblemTypes() []string {
 	return i.problemTypes
+}
+
+func (i mergeCVEItem) Description() string {
+	return i.description
 }
 
 func (i mergeCVEItem) CVSS20base() float64 {
