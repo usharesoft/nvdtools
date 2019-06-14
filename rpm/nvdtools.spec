@@ -1,11 +1,11 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 
-Name: nvdtools
+Name: usharesoft-nvdtools
 Summary: A collection of tools for working with National Vulnerability Database feeds.
 Version: %{_version}
 Release: 1
 License: Apache License 2.0
-URL: https://github.com/facebookincubator/nvdtools
+URL: https://github.com/usharesoft/nvdtools
 Source0: %{name}-%{version}.tar.gz
 
 %description
