@@ -13,7 +13,7 @@
 # limitations under the License.
 
 NAME = usharesoft-nvdtools
-VERSION = tip
+VERSION = 1.0.0
 
 TOOLS = \
 	cpe2cve \
